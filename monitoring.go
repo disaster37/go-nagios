@@ -24,7 +24,7 @@ const (
 type Monitoring struct {
 	messages  []string
 	status    int
-	perfdatas modelPerfdata.Perfdatas
+	perfdatas Perfdatas
 }
 
 // NewMonitoring permit to create monitoring object
@@ -32,7 +32,7 @@ type Monitoring struct {
 func NewMonitoring() *Monitoring {
 	monitoringData := &Monitoring{
 		status:    STATUS_OK,
-		perfdatas: make(modelPerfdata.Perfdatas, 0, 1),
+		perfdatas: make(Perfdatas, 0, 1),
 		messages:  make([]string, 0, 1),
 	}
 
@@ -84,7 +84,7 @@ func (m *Monitoring) Message(index int) (string, error) {
 func (m *Monitoring) AddPerfdata(label string, value int, unit string) error {
 	log.Debugf("Label: %s, Value: %d, Unit: %s", label, value, unit)
 
-	perfdata, err := modelPerfdata.NewPerfdata(label, value, unit)
+	perfdata, err := NewPerfdata(label, value, unit)
 	if err != nil {
 		return errors.Wrap(err, "Error appear when tryp to create new perfdata")
 	}
@@ -95,12 +95,12 @@ func (m *Monitoring) AddPerfdata(label string, value int, unit string) error {
 }
 
 // Perfdatas permit to get all perfdatas
-func (m *Monitoring) Perfdatas() modelPerfdata.Perfdatas {
+func (m *Monitoring) Perfdatas() Perfdatas {
 	return m.perfdatas
 }
 
 // Perfdata permit to get perfdata on given index
-func (m *Monitoring) Perfdata(index int) (*modelPerfdata.Perfdata, error) {
+func (m *Monitoring) Perfdata(index int) (*Perfdata, error) {
 	if index >= len(m.perfdatas) {
 		return nil, errors.New("Index is out of list messages")
 	}

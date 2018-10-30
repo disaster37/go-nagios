@@ -1,7 +1,6 @@
 package nagiosPlugin
 
 import (
-	"github.com/disaster37/check-rancher/model/perfdata"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -11,7 +10,7 @@ func TestNewMonitoring(t *testing.T) {
 	md := NewMonitoring()
 	assert.Equal(t, 0, md.Status())
 	assert.Equal(t, make([]string, 0), md.messages)
-	assert.Equal(t, make(modelPerfdata.Perfdatas, 0), md.perfdatas)
+	assert.Equal(t, make(Perfdatas, 0), md.perfdatas)
 }
 
 // Test We can get and set status
