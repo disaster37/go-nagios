@@ -22,6 +22,10 @@ func TestGetSetStatus(t *testing.T) {
 	monitoringData.SetStatus(1)
 	assert.Equal(t, 1, monitoringData.Status())
 
+	// With status as string
+	monitoringData.SetStatusAsString("WARNING")
+	assert.Equal(t, 1, monitoringData.Status())
+
 	// Bad use case
 	assert.Error(t, monitoringData.SetStatus(-1))
 	assert.Error(t, monitoringData.SetStatus(5))

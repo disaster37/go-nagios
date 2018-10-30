@@ -10,6 +10,7 @@ import (
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 	"os"
+	"strings"
 )
 
 // Nagios status
@@ -54,16 +55,39 @@ func (m *Monitoring) SetStatus(status int) error {
 	return nil
 }
 
+// SetStatusAsString permit to set new monitoring status as string if the current status is more critical that the previous status
+func (m *Monitoring) SetStatusAsString(statusString string) error {
+	log.Debugf("Status: %s", statusString)
+
+	status := 0
+
+	switch strings.ToUpper(statusString) {
+	case "UNKNOWN":
+		status = STATUS_UNKNOWN
+	case "OK":
+		status = STATUS_OK
+	case "WARNING":
+		status = STATUS_WARNING
+	case "CRITICAL":
+		status = STATUS_CRITICAL
+	default:
+		return errors.New("Status must be UNKNOWN, OK, WARNING or CRITICAL")
+
+	}
+
+	return m.SetStatus(status)
+}
+
 // Status permit to get the monitoring status
 func (m *Monitoring) Status() int {
 	return m.status
 }
 
 // AddMessage permit to add message to display in monitoring tools
-func (m *Monitoring) AddMessage(message string) {
+func (m *Monitoring) AddMessage(message string, params ...interface{}) {
 	log.Debugf("Message: %s", message)
 
-	m.messages = append(m.messages, message)
+	m.messages = append(m.messages, fmt.Sprintf(message, params...))
 }
 
 // Messages permit to get all messages
